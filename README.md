@@ -8,8 +8,8 @@ npm install
 # 3. Dev server start pannunga
 npm run dev
 
-backend 
-#python3 -m venv venv
-#source venv/bin/activate
-#pip install -r requirements.txt
-#uvicorn app.main:app --reload
+ # backend 
+# 1. python3 -m venv venv
+# 2. source venv/bin/activate
+# 3. pip install -r requirements.txt
+# 4. uvicorn app.main:app --reload
