@@ -46,7 +46,7 @@ const Pricing = () => (
           "Payments integration",
           "Third-party integrations",
           "3 months priority support",
-          "Unlimited revisions",
+          "3 rounds of revisions",
         ]}
       />
     </section>
