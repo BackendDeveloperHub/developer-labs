@@ -12,9 +12,9 @@ const Contact = () => (
     <section className="container py-16 grid gap-10 lg:grid-cols-5">
       <div className="lg:col-span-2 space-y-5">
         {[
-          { icon: Mail, title: "Email", value: "hello@developerlabs.in" },
-          { icon: Phone, title: "Phone", value: "+91 98765 43210" },
-          { icon: MapPin, title: "Office", value: "Bengaluru, India" },
+          { icon: Mail, title: "Email", value: "contact@developerlabs.online" },
+          { icon: Phone, title: "Phone", value: "+91 6381931912" },
+          { icon: MapPin, title: "Office", value: "Chennai, India" },
         ].map((c) => (
           <div key={c.title} className="flex items-start gap-4 rounded-2xl border border-border bg-gradient-card p-5 shadow-card">
             <div className="grid h-11 w-11 place-items-center rounded-lg bg-gradient-primary shadow-glow shrink-0">
