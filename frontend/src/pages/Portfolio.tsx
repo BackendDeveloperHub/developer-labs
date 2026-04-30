@@ -2,10 +2,11 @@ import Layout from "@/components/Layout";
 import { ExternalLink } from "lucide-react";
 
 const projects = [
-  { title: "BlueRoom Studio", category: "Booking Platform", description: "End-to-end booking and scheduling app for a creative studio.", color: "from-blue-500/30 to-violet-500/30" },
-  { title: "Kettle & Co.", category: "E-commerce", description: "Premium tea brand storefront with custom product pages.", color: "from-emerald-500/30 to-cyan-500/30" },
-  { title: "Finlytics", category: "SaaS Dashboard", description: "Analytics dashboard for a fintech startup with real-time charts.", color: "from-violet-500/30 to-pink-500/30" },
-  { title: "ClinicCare", category: "Web App", description: "Patient management portal for a chain of dental clinics.", color: "from-cyan-500/30 to-blue-500/30" },
+  { title: "bdh-fastapi-new", category: "CLI Tool", description: "PyPI-published CLI scaffold for FastAPI projects with --ai and --admin flags.", color: "from-indigo-500/30 to-blue-500/30", github: "https://github.com/BackendDeveloperHub/bdh-fastapi-new", live: "https://pypi.org/project/bdh-fastapi-new/" },
+  { title: "BDH Linux", category: "Linux Distro", description: "Custom Arch/Manjaro developer environment pre-configured for backend devs.", color: "from-teal-500/30 to-cyan-500/30", github: "https://github.com/BackendDeveloperHub/bdh-linux" },
+  { title: "AI API Builder", category: "AI Tool", description: "Converts natural language prompts into production-ready FastAPI code using Groq + Gemini.", color: "from-sky-500/30 to-indigo-500/30", github: "https://github.com/BackendDeveloperHub/ai-api-builder", live: "https://apibuil.fastapicloud.dev/" },
+  { title: "Tamizhi", category: "Language Tool", description: "Native compiled Tamil language tooling built to support regional language developers.", color: "from-rose-500/30 to-red-500/30", github: "https://github.com/BackendDeveloperHub/Tamizhi" },
+
   { title: "Routely", category: "API Platform", description: "Logistics API powering 200+ daily delivery routes.", color: "from-orange-500/30 to-rose-500/30" },
   { title: "Greenleaf Realty", category: "Marketing Website", description: "Lead-generating real estate website with property search.", color: "from-emerald-500/30 to-lime-500/30" },
 ];
