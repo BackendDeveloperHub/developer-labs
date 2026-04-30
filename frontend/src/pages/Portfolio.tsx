@@ -6,7 +6,6 @@ const projects = [
   { title: "BDH Linux", category: "Linux Distro", description: "Custom Arch/Manjaro developer environment pre-configured for backend devs.", color: "from-teal-500/30 to-cyan-500/30", github: "https://github.com/BackendDeveloperHub/bdh-linux" },
   { title: "AI API Builder", category: "AI Tool", description: "Converts natural language prompts into production-ready FastAPI code using Groq + Gemini.", color: "from-sky-500/30 to-indigo-500/30", github: "https://github.com/BackendDeveloperHub/ai-api-builder", live: "https://apibuil.fastapicloud.dev/" },
   { title: "Tamizhi", category: "Language Tool", description: "Native compiled Tamil language tooling built to support regional language developers.", color: "from-rose-500/30 to-red-500/30", github: "https://github.com/BackendDeveloperHub/Tamizhi" },
-
   { title: "Routely", category: "API Platform", description: "Logistics API powering 200+ daily delivery routes.", color: "from-orange-500/30 to-rose-500/30" },
   { title: "Greenleaf Realty", category: "Marketing Website", description: "Lead-generating real estate website with property search.", color: "from-emerald-500/30 to-lime-500/30" },
 ];
@@ -20,7 +19,13 @@ const Portfolio = () => (
 
     <section className="container py-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {projects.map((p) => (
-        <div key={p.title} className="group rounded-2xl border border-border bg-gradient-card overflow-hidden shadow-card transition-smooth hover:border-primary/50 hover:-translate-y-1">
+        <a
+          key={p.title}
+          href={p.github || p.live || "#"}
+          target={p.github || p.live ? "_blank" : "_self"}
+          rel="noopener noreferrer"
+          className="group rounded-2xl border border-border bg-gradient-card overflow-hidden shadow-card transition-smooth hover:border-primary/50 hover:-translate-y-1 block no-underline"
+        >
           <div className={`aspect-[4/3] bg-gradient-to-br ${p.color} relative`}>
             <div className="absolute inset-0 grid place-items-center">
               <span className="text-2xl font-bold opacity-40">{p.title}</span>
@@ -34,7 +39,7 @@ const Portfolio = () => (
             </h3>
             <p className="mt-2 text-sm text-muted-foreground">{p.description}</p>
           </div>
-        </div>
+        </a>
       ))}
     </section>
   </Layout>
