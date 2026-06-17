@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developer Labs — Premium Web Development</title>
+  <meta name="description" content="Developer Labs builds fast, beautiful websites and web apps for small businesses ready to grow online." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: hsl(222, 47%, 5%);
+      --bg-card: linear-gradient(145deg, hsl(222,47%,8%), hsl(222,47%,6%));
+      --fg: hsl(210, 40%, 98%);
+      --fg-muted: hsl(215, 20%, 65%);
+      --primary: hsl(217, 91%, 60%);
+      --accent: hsl(250, 91%, 65%);
+      --border: hsl(217, 33%, 15%);
+      --secondary: hsl(217, 33%, 12%);
+      --destructive: hsl(0, 84%, 60%);
+      --grad-primary: linear-gradient(135deg, hsl(217,91%,60%), hsl(250,91%,65%));
+      --grad-hero: radial-gradient(ellipse at top, hsl(217 91% 60% / 0.25), transparent 60%), radial-gradient(ellipse at bottom right, hsl(250 91% 65% / 0.18), transparent 60%);
+      --shadow-glow: 0 0 60px hsl(217 91% 60% / 0.3);
+      --shadow-elegant: 0 20px 60px -20px hsl(217 91% 60% / 0.4);
+      --shadow-card: 0 8px 30px -10px hsl(0 0% 0% / 0.5);
+      --radius: 0.75rem;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Utilities ── */
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 1.25rem; }
+    .text-gradient { background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .bg-grad-primary { background: var(--grad-primary); }
+    .bg-grad-hero { background: var(--grad-hero); }
+    .bg-grad-card { background: var(--bg-card); }
+    .shadow-glow { box-shadow: var(--shadow-glow); }
+    .shadow-card { box-shadow: var(--shadow-card); }
+    .shadow-elegant { box-shadow: var(--shadow-elegant); }
+    .muted { color: var(--fg-muted); }
+    .hidden { display: none !important; }
+
+    /* ── Navbar ── */
+    .navbar {
+      position: sticky; top: 0; z-index: 50;
+      width: 100%; border-bottom: 1px solid hsl(217,33%,15%,0.4);
+      background: hsl(222,47%,5%,0.7);
+      backdrop-filter: blur(20px);
+    }
+    .navbar-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-weight: 700; font-size: 1.1rem; text-decoration: none; color: var(--fg);
+    }
+    .logo-icon {
+      width: 36px; height: 36px;
+      display: grid; place-items: center;
+      border-radius: 0.5rem;
+      background: var(--grad-primary);
+      box-shadow: var(--shadow-glow);
+      font-size: 1rem;
+    }
+    .nav-links { display: flex; align-items: center; gap: 2rem; }
+    .nav-links a {
+      font-size: 0.875rem; text-decoration: none;
+      color: var(--fg-muted); transition: var(--transition);
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--fg); }
+    .btn { display: inline-flex; align-items: center; gap: 0.25rem; font-weight: 600; border-radius: var(--radius); cursor: pointer; transition: var(--transition); border: none; font-size: 0.875rem; text-decoration: none; }
+    .btn-hero { background: var(--grad-primary); color: hsl(222,47%,5%); padding: 0.5rem 1.25rem; box-shadow: var(--shadow-glow); }
+    .btn-hero:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-hero-lg { padding: 0.75rem 1.75rem; font-size: 1rem; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--fg); padding: 0.75rem 1.75rem; font-size: 1rem; }
+    .btn-outline:hover { border-color: var(--primary); }
+    .btn-secondary { background: var(--secondary); color: var(--fg); padding: 0.75rem 1.75rem; font-size: 1rem; }
+    .hamburger { display: none; background: none; border: none; color: var(--fg); cursor: pointer; padding: 0.5rem; }
+    .mobile-menu {
+      display: none; flex-direction: column; gap: 0.25rem; padding: 1rem 0;
+      border-top: 1px solid hsl(217,33%,15%,0.4);
+      background: hsl(222,47%,5%,0.95);
+      backdrop-filter: blur(20px);
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      padding: 0.5rem 0.75rem; border-radius: 0.5rem;
+      font-size: 0.875rem; text-decoration: none; color: var(--fg-muted);
+      transition: var(--transition);
+    }
+    .mobile-menu a:hover, .mobile-menu a.active { background: var(--secondary); color: var(--fg); }
+
+    /* ── Pages ── */
+    .page { display: none; flex: 1; }
+    .page.active { display: block; }
+
+    /* ── Hero ── */
+    .hero {
+      background: var(--grad-hero);
+      text-align: center; padding: 6rem 1.25rem;
+      position: relative; overflow: hidden;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      border: 1px solid var(--border); background: hsl(217,33%,12%,0.4);
+      border-radius: 99px; padding: 0.375rem 1rem;
+      font-size: 0.75rem; color: var(--fg-muted);
+      backdrop-filter: blur(8px); margin-bottom: 1.5rem;
+    }
+    .hero-badge span { color: var(--primary); }
+    .hero h1 { font-size: clamp(2.2rem, 6vw, 4.5rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em; max-width: 900px; margin: 0 auto; }
+    .hero p { margin-top: 1.5rem; font-size: 1.125rem; color: var(--fg-muted); max-width: 600px; margin-left: auto; margin-right: auto; }
+    .hero-ctas { margin-top: 2.5rem; display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ── Stats ── */
+    .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: -2.5rem; }
+    @media(min-width:768px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+    .stat-card {
+      border-radius: 0.75rem; border: 1px solid var(--border);
+      background: var(--bg-card); padding: 1.25rem; text-align: center;
+      box-shadow: var(--shadow-card);
+    }
+    .stat-card .val { font-size: clamp(1.5rem, 3vw, 1.875rem); font-weight: 700; }
+    .stat-card .label { margin-top: 0.25rem; font-size: 0.75rem; color: var(--fg-muted); }
+
+    /* ── Section heads ── */
+    .section { padding: 5rem 0; }
+    .section-head { text-align: center; max-width: 600px; margin: 0 auto 3rem; }
+    .section-head .eyebrow { font-size: 0.75rem; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; }
+    .section-head h2 { margin-top: 0.5rem; font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 700; }
+    .section-head p { margin-top: 0.75rem; color: var(--fg-muted); }
+
+    /* ── Service cards ── */
+    .services-grid { display: grid; gap: 1.25rem; }
+    @media(min-width:768px) { .services-grid { grid-template-columns: repeat(2,1fr); } }
+    @media(min-width:1024px) { .services-grid-4 { grid-template-columns: repeat(4,1fr); } }
+    .svc-card {
+      border-radius: 1rem; border: 1px solid var(--border);
+      background: var(--bg-card); padding: 1.5rem;
+      box-shadow: var(--shadow-card); transition: var(--transition);
+    }
+    .svc-card:hover { border-color: hsl(217,91%,60%,0.5); transform: translateY(-4px); box-shadow: var(--shadow-elegant); }
+    .svc-icon {
+      width: 48px; height: 48px; display: grid; place-items: center;
+      border-radius: 0.75rem; background: var(--grad-primary);
+      box-shadow: var(--shadow-glow); margin-bottom: 1.25rem;
+      font-size: 1.25rem;
+    }
+    .svc-card h3 { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .svc-card p { font-size: 0.875rem; color: var(--fg-muted); line-height: 1.6; }
+
+    /* ── Pricing ── */
+    .pricing-grid { display: grid; gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
+    @media(min-width:768px) { .pricing-grid { grid-template-columns: repeat(3,1fr); } }
+    .price-card {
+      border-radius: 1rem; border: 1px solid var(--border);
+      background: var(--bg-card); padding: 2rem;
+      box-shadow: var(--shadow-card); display: flex; flex-direction: column;
+      transition: var(--transition); position: relative;
+    }
+    .price-card:hover { border-color: hsl(217,91%,60%,0.4); }
+    .price-card.highlighted { border: 2px solid var(--primary); box-shadow: var(--shadow-elegant); transform: scale(1.02); }
+    .popular-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--grad-primary); border-radius: 99px;
+      padding: 0.25rem 0.75rem; font-size: 0.75rem; font-weight: 600;
+      color: hsl(222,47%,5%); white-space: nowrap;
+      box-shadow: var(--shadow-glow);
+    }
+    .price-card h3 { font-size: 1.25rem; font-weight: 600; }
+    .price-card .desc { margin-top: 0.25rem; font-size: 0.875rem; color: var(--fg-muted); }
+    .price-val { margin-top: 1.5rem; display: flex; align-items: baseline; gap: 0.25rem; }
+    .price-val .amount { font-size: 2.5rem; font-weight: 700; }
+    .price-val .per { font-size: 0.875rem; color: var(--fg-muted); }
+    .features { margin-top: 1.5rem; list-style: none; space-y: 0.75rem; flex: 1; display: flex; flex-direction: column; gap: 0.75rem; }
+    .features li { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.875rem; }
+    .check { width: 20px; height: 20px; border-radius: 50%; background: hsl(217,91%,60%,0.15); display: grid; place-items: center; flex-shrink: 0; margin-top: 1px; }
+    .check svg { width: 12px; height: 12px; stroke: var(--primary); fill: none; stroke-width: 2.5; }
+    .features li span { color: var(--fg-muted); }
+    .price-card .btn { margin-top: 2rem; width: 100%; justify-content: center; }
+
+    /* ── Portfolio ── */
+    .portfolio-grid { display: grid; gap: 1.5rem; }
+    @media(min-width:768px) { .portfolio-grid { grid-template-columns: repeat(2,1fr); } }
+    @media(min-width:1024px) { .portfolio-grid { grid-template-columns: repeat(3,1fr); } }
+    .port-card {
+      border-radius: 1rem; border: 1px solid var(--border);
+      background: var(--bg-card); overflow: hidden;
+      box-shadow: var(--shadow-card); transition: var(--transition);
+      text-decoration: none; color: var(--fg); display: block;
+    }
+    .port-card:hover { border-color: hsl(217,91%,60%,0.5); transform: translateY(-4px); }
+    .port-thumb {
+      aspect-ratio: 4/3;
+      display: grid; place-items: center;
+      font-size: 1.25rem; font-weight: 700; opacity: 0.4;
+    }
+    .port-info { padding: 1.25rem; }
+    .port-cat { font-size: 0.75rem; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 0.08em; }
+    .port-info h3 { margin-top: 0.5rem; font-size: 1.125rem; font-weight: 600; }
+    .port-info p { margin-top: 0.5rem; font-size: 0.875rem; color: var(--fg-muted); }
+
+    /* ── About stats ── */
+    .about-stats {
+      border-radius: 1.5rem; border: 1px solid var(--border);
+      background: var(--bg-card); padding: 2.5rem;
+      box-shadow: var(--shadow-card);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; text-align: center;
+    }
+    .about-stats .val { font-size: 2.5rem; font-weight: 700; }
+    .about-stats .lbl { margin-top: 0.25rem; font-size: 0.875rem; color: var(--fg-muted); }
+
+    /* ── Values ── */
+    .values-grid { display: grid; gap: 1.5rem; margin-top: 2.5rem; }
+    @media(min-width:768px) { .values-grid { grid-template-columns: repeat(3,1fr); } }
+    .val-card {
+      border-radius: 1rem; border: 1px solid var(--border);
+      background: var(--bg-card); padding: 1.5rem;
+      box-shadow: var(--shadow-card);
+    }
+    .val-icon {
+      width: 48px; height: 48px; display: grid; place-items: center;
+      border-radius: 0.75rem; background: var(--grad-primary);
+      box-shadow: var(--shadow-glow); margin-bottom: 1.25rem; font-size: 1.25rem;
+    }
+    .val-card h3 { font-weight: 600; margin-bottom: 0.5rem; }
+    .val-card p { font-size: 0.875rem; color: var(--fg-muted); }
+
+    /* ── Contact ── */
+    .contact-grid { display: grid; gap: 2.5rem; }
+    @media(min-width:1024px) { .contact-grid { grid-template-columns: 2fr 3fr; } }
+    .contact-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+      border-radius: 1rem; border: 1px solid var(--border);
+      background: var(--bg-card); padding: 1.25rem;
+      box-shadow: var(--shadow-card);
+    }
+    .contact-icon {
+      width: 44px; height: 44px; display: grid; place-items: center;
+      border-radius: 0.5rem; background: var(--grad-primary);
+      box-shadow: var(--shadow-glow); flex-shrink: 0; font-size: 1rem;
+    }
+    .contact-item .lbl { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--fg-muted); }
+    .contact-item .val { margin-top: 0.25rem; font-weight: 500; }
+    .contact-info { display: flex; flex-direction: column; gap: 1rem; }
+
+    /* ── Form ── */
+    .form-card {
+      border-radius: 1rem; border: 1px solid var(--border);
+      background: var(--bg-card); padding: 2rem;
+      box-shadow: var(--shadow-card);
+    }
+    .form-group { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.25rem; }
+    .form-group label { font-size: 0.875rem; font-weight: 500; }
+    .form-group input, .form-group textarea, .form-group select {
+      background: var(--secondary); border: 1px solid var(--border);
+      border-radius: 0.5rem; color: var(--fg); padding: 0.625rem 0.875rem;
+      font-size: 0.875rem; font-family: inherit; width: 100%; transition: var(--transition);
+      outline: none;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 2px hsl(217,91%,60%,0.2); }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: var(--fg-muted); }
+    .form-group textarea { resize: vertical; min-height: 130px; }
+    .form-error { font-size: 0.75rem; color: var(--destructive); margin-top: 0.25rem; }
+    .form-success {
+      background: hsl(142,76%,36%,0.1); border: 1px solid hsl(142,76%,36%,0.3);
+      border-radius: 0.5rem; padding: 1rem; font-size: 0.875rem;
+      color: hsl(142,76%,55%); text-align: center; margin-bottom: 1rem;
+    }
+
+    /* ── Testimonial ── */
+    .testimonial {
+      border-radius: 1.5rem; border: 1px solid var(--border);
+      background: var(--bg-card); padding: 3rem;
+      box-shadow: var(--shadow-card); text-align: center;
+    }
+    .stars { display: flex; justify-content: center; gap: 0.25rem; margin-bottom: 1rem; color: var(--primary); }
+    .testimonial blockquote { font-size: clamp(1.1rem, 2.5vw, 1.375rem); font-weight: 500; max-width: 750px; margin: 0 auto; line-height: 1.6; }
+    .testimonial cite { display: block; margin-top: 1.5rem; font-size: 0.875rem; color: var(--fg-muted); font-style: normal; }
+
+    /* ── CTA band ── */
+    .cta-band {
+      border-radius: 1.5rem; background: var(--grad-primary);
+      padding: 3rem; text-align: center;
+      box-shadow: var(--shadow-elegant); margin-bottom: 1.5rem;
+    }
+    .cta-band h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 700; color: hsl(222,47%,5%); }
+    .cta-band p { margin-top: 0.75rem; color: hsl(222,47%,20%); max-width: 500px; margin-left: auto; margin-right: auto; }
+    .cta-band .btn { margin-top: 1.75rem; background: hsl(222,47%,5%,0.15); color: hsl(222,47%,5%); border: 2px solid hsl(222,47%,5%,0.2); font-weight: 700; }
+    .cta-band .btn:hover { background: hsl(222,47%,5%,0.25); }
+
+    /* ── About story layout ── */
+    .about-story { display: grid; gap: 2.5rem; align-items: center; }
+    @media(min-width:768px) { .about-story { grid-template-columns: 1fr 1fr; } }
+    .about-story .eyebrow { font-size: 0.75rem; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; }
+    .about-story h2 { margin-top: 0.5rem; font-size: 1.875rem; font-weight: 700; }
+    .about-story p { margin-top: 1rem; color: var(--fg-muted); line-height: 1.7; }
+
+    /* ── Info banner ── */
+    .info-banner {
+      border-radius: 1.5rem; border: 1px solid var(--border);
+      background: var(--bg-card); padding: 2.5rem;
+      box-shadow: var(--shadow-card); text-align: center;
+    }
+    .info-banner h2 { font-size: 1.75rem; font-weight: 700; }
+    .info-banner p { margin-top: 0.75rem; color: var(--fg-muted); max-width: 500px; margin-left: auto; margin-right: auto; }
+    .info-banner .btn { margin-top: 1.5rem; }
+
+    /* ── Page hero (inner pages) ── */
+    .page-hero { background: var(--grad-hero); text-align: center; padding: 5rem 1.25rem; }
+    .page-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.1; }
+    .page-hero p { margin-top: 1rem; color: var(--fg-muted); max-width: 600px; margin-left: auto; margin-right: auto; }
+
+    /* ── Pricing note ── */
+    .pricing-note { text-align: center; padding: 1.5rem 0 3rem; font-size: 0.875rem; color: var(--fg-muted); }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid hsl(217,33%,15%,0.4);
+      background: var(--bg);
+    }
+    .footer-grid { display: grid; gap: 2.5rem; padding: 3rem 0; }
+    @media(min-width:768px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr; } }
+    .footer-brand p { margin-top: 1rem; font-size: 0.875rem; color: var(--fg-muted); max-width: 300px; }
+    .footer-social { display: flex; gap: 0.75rem; margin-top: 1.25rem; }
+    .social-btn {
+      width: 36px; height: 36px; display: grid; place-items: center;
+      border-radius: 0.5rem; border: 1px solid var(--border);
+      color: var(--fg-muted); transition: var(--transition); text-decoration: none; font-size: 0.875rem;
+    }
+    .social-btn:hover { color: var(--fg); border-color: var(--primary); }
+    .footer-col h4 { font-size: 0.875rem; font-weight: 600; margin-bottom: 1rem; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .footer-col a { font-size: 0.875rem; color: var(--fg-muted); text-decoration: none; transition: var(--transition); cursor: pointer; }
+    .footer-col a:hover { color: var(--fg); }
+    .footer-bottom {
+      border-top: 1px solid hsl(217,33%,15%,0.4); padding: 1.5rem 0;
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+      font-size: 0.75rem; color: var(--fg-muted);
+    }
+
+    /* ── SVG icons inline ── */
+    svg { display: inline-block; vertical-align: middle; }
+
+    @media(max-width:767px) {
+      .nav-links, .navbar .btn-hero { display: none; }
+      .hamburger { display: block; }
+      .hero { padding: 4rem 1.25rem; }
+      .testimonial { padding: 2rem; }
+      .cta-band { padding: 2rem; }
+      .form-card { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<header class="navbar">
+  <nav class="container navbar-inner">
+    <a class="logo" href="#" onclick="navigate('home')">
+      <span class="logo-icon">⌨️</span>
+      <span>Developer<span class="text-gradient">Labs</span></span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#" onclick="navigate('home')" class="active" data-page="home">Home</a>
+      <a href="#" onclick="navigate('services')" data-page="services">Services</a>
+      <a href="#" onclick="navigate('pricing')" data-page="pricing">Pricing</a>
+      <a href="#" onclick="navigate('portfolio')" data-page="portfolio">Portfolio</a>
+      <a href="#" onclick="navigate('about')" data-page="about">About</a>
+      <a href="#" onclick="navigate('contact')" data-page="contact">Contact</a>
+    </div>
+    <a href="#" class="btn btn-hero" onclick="navigate('contact')">Get a Quote</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </nav>
+  <div class="mobile-menu container" id="mobileMenu">
+    <a href="#" onclick="navigate('home')" data-page="home">Home</a>
+    <a href="#" onclick="navigate('services')" data-page="services">Services</a>
+    <a href="#" onclick="navigate('pricing')" data-page="pricing">Pricing</a>
+    <a href="#" onclick="navigate('portfolio')" data-page="portfolio">Portfolio</a>
+    <a href="#" onclick="navigate('about')" data-page="about">About</a>
+    <a href="#" onclick="navigate('contact')" data-page="contact">Contact</a>
+    <a href="#" class="btn btn-hero" style="margin-top:.5rem;justify-content:center;" onclick="navigate('contact')">Get a Quote</a>
+  </div>
+</header>
+
+<!-- ════════════════════════════════
+     HOME PAGE
+════════════════════════════════ -->
+<main id="page-home" class="page active">
+
+  <section class="hero">
+    <div class="hero-badge"><span>✦</span> Premium Web Development</div>
+    <h1>Websites & web apps that <span class="text-gradient">grow your business</span></h1>
+    <p>Developer Labs partners with small businesses to ship premium websites, web apps and APIs — designed beautifully and built to last.</p>
+    <div class="hero-ctas">
+      <a href="#" class="btn btn-hero btn-hero-lg" onclick="navigate('contact')">Get a Quote →</a>
+      <a href="#" class="btn btn-outline" onclick="navigate('portfolio')">View Our Work</a>
+    </div>
+  </section>
+
+  <section class="container" style="padding-top:0;">
+    <div class="stats">
+      <div class="stat-card"><div class="val text-gradient">50+</div><div class="label">Projects Shipped</div></div>
+      <div class="stat-card"><div class="val text-gradient">98%</div><div class="label">Client Satisfaction</div></div>
+      <div class="stat-card"><div class="val text-gradient">24h</div><div class="label">Avg Response</div></div>
+      <div class="stat-card"><div class="val text-gradient">5★</div><div class="label">Average Rating</div></div>
+    </div>
+  </section>
+
+  <section class="container section">
+    <div class="section-head">
+      <p class="eyebrow">What we do</p>
+      <h2>Everything you need to launch & scale</h2>
+      <p class="muted">From a clean five-page site to a full-stack SaaS — we cover the full development stack.</p>
+    </div>
+    <div class="services-grid services-grid-4">
+      <div class="svc-card"><div class="svc-icon">🌐</div><h3>Business Websites</h3><p>Fast, SEO-ready marketing sites that convert visitors into customers.</p></div>
+      <div class="svc-card"><div class="svc-icon">🖥️</div><h3>Web Applications</h3><p>Custom dashboards, portals and SaaS products built for scale.</p></div>
+      <div class="svc-card"><div class="svc-icon">⚙️</div><h3>API Development</h3><p>Robust REST and GraphQL APIs that power your products and integrations.</p></div>
+      <div class="svc-card"><div class="svc-icon">🔧</div><h3>Website Maintenance</h3><p>Ongoing updates, monitoring and performance care so you can focus on growth.</p></div>
+    </div>
+  </section>
+
+  <section class="container" style="padding-bottom:5rem;">
+    <div class="section-head">
+      <p class="eyebrow">Pricing</p>
+      <h2>Simple packages, transparent pricing</h2>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3>Starter</h3><p class="desc">Perfect for small businesses going online.</p>
+        <div class="price-val"><span class="amount text-gradient">₹4,999</span><span class="per">/ project</span></div>
+        <ul class="features">
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>5-page static site</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>Mobile responsive</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>Basic SEO setup</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>Contact form</span></li>
+        </ul>
+        <a href="#" class="btn btn-outline" onclick="navigate('contact')">Get Started</a>
+      </div>
+      <div class="price-card highlighted">
+        <div class="popular-badge">Most Popular</div>
+        <h3>Growth</h3><p class="desc">Web app with the essentials to grow.</p>
+        <div class="price-val"><span class="amount text-gradient">₹12,999</span><span class="per">/ project</span></div>
+        <ul class="features">
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>Web app + dashboard</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>User authentication</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>Database integration</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>1 month support</span></li>
+        </ul>
+        <a href="#" class="btn btn-hero" onclick="navigate('contact')">Get Started</a>
+      </div>
+      <div class="price-card">
+        <h3>Pro</h3><p class="desc">Full-stack product with custom APIs.</p>
+        <div class="price-val"><span class="amount text-gradient">₹24,999</span><span class="per">/ project</span></div>
+        <ul class="features">
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>Full-stack web app</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>Custom REST API</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>Payments integration</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>3 months support</span></li>
+        </ul>
+        <a href="#" class="btn btn-outline" onclick="navigate('contact')">Get Started</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container" style="padding-bottom:5rem;">
+    <div class="testimonial">
+      <div class="stars">★★★★★</div>
+      <blockquote>"Developer Labs delivered our entire booking platform in 4 weeks. Clean code, thoughtful design, and they actually picked up the phone."</blockquote>
+      <cite>— Priya Sharma, Founder at BlueRoom Studio</cite>
+    </div>
+  </section>
+
+  <section class="container" style="padding-bottom:5rem;">
+    <div class="cta-band">
+      <h2>Ready to build something great?</h2>
+      <p>Tell us about your project — we'll send back a free quote within 24 hours.</p>
+      <a href="#" class="btn btn-hero-lg btn" onclick="navigate('contact')">Get a Quote →</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ════════════════════════════════
+     SERVICES PAGE
+════════════════════════════════ -->
+<main id="page-services" class="page">
+
+  <div class="page-hero">
+    <h1>Our <span class="text-gradient">Services</span></h1>
+    <p>Full-stack web development for small businesses ready to grow.</p>
+  </div>
+
+  <section class="container section">
+    <div class="services-grid">
+      <div class="svc-card"><div class="svc-icon">🌐</div><h3>Business Websites</h3><p>Fast, mobile-first marketing websites built with SEO and conversion in mind. Ideal for studios, agencies and local businesses.</p></div>
+      <div class="svc-card"><div class="svc-icon">🖥️</div><h3>Web Applications</h3><p>Custom dashboards, internal tools and SaaS products built with modern stacks like React, Next.js, FastAPI and Supabase.</p></div>
+      <div class="svc-card"><div class="svc-icon">⚙️</div><h3>API Development</h3><p>Production-grade REST and GraphQL APIs with authentication, rate limiting and clean documentation.</p></div>
+      <div class="svc-card"><div class="svc-icon">🔧</div><h3>Website Maintenance</h3><p>Monthly retainers for updates, security patches, performance audits and content changes.</p></div>
+    </div>
+  </section>
+
+  <section class="container" style="padding-bottom:5rem;">
+    <div class="info-banner">
+      <h2>Not sure what you need?</h2>
+      <p>Book a free 20-minute discovery call and we'll help you scope the right solution.</p>
+      <a href="#" class="btn btn-hero btn-hero-lg" onclick="navigate('contact')">Book a Free Call →</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ════════════════════════════════
+     PRICING PAGE
+════════════════════════════════ -->
+<main id="page-pricing" class="page">
+
+  <div class="page-hero">
+    <h1>Simple, <span class="text-gradient">transparent pricing</span></h1>
+    <p>Pick a package or contact us for a custom quote. No surprises, no hidden fees.</p>
+  </div>
+
+  <section class="container section">
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3>Starter</h3><p class="desc">Get online with a polished 5-page website.</p>
+        <div class="price-val"><span class="amount text-gradient">₹4,999</span><span class="per">/ project</span></div>
+        <ul class="features">
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>5-page static website</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>Mobile responsive design</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>Basic on-page SEO</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>Contact form</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>Free domain setup help</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>1 round of revisions</span></li>
+        </ul>
+        <a href="#" class="btn btn-outline" onclick="navigate('contact')">Get Started</a>
+      </div>
+      <div class="price-card highlighted">
+        <div class="popular-badge">Most Popular</div>
+        <h3>Growth</h3><p class="desc">A web app with the essentials to grow your business.</p>
+        <div class="price-val"><span class="amount text-gradient">₹12,999</span><span class="per">/ project</span></div>
+        <ul class="features">
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>Web app + admin dashboard</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>User authentication</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>Database integration</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>Email notifications</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>1 month free support</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>2 rounds of revisions</span></li>
+        </ul>
+        <a href="#" class="btn btn-hero" onclick="navigate('contact')">Get Started</a>
+      </div>
+      <div class="price-card">
+        <h3>Pro</h3><p class="desc">A full-stack product with custom APIs and integrations.</p>
+        <div class="price-val"><span class="amount text-gradient">₹24,999</span><span class="per">/ project</span></div>
+        <ul class="features">
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>Full-stack web application</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>Custom REST/GraphQL API</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>Payments integration</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>Third-party integrations</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>3 months priority support</span></li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>3 rounds of revisions</span></li>
+        </ul>
+        <a href="#" class="btn btn-outline" onclick="navigate('contact')">Get Started</a>
+      </div>
+    </div>
+    <p class="pricing-note">All prices in INR. GST extra where applicable.</p>
+  </section>
+
+</main>
+
+<!-- ════════════════════════════════
+     PORTFOLIO PAGE
+════════════════════════════════ -->
+<main id="page-portfolio" class="page">
+
+  <div class="page-hero">
+    <h1>Our <span class="text-gradient">Portfolio</span></h1>
+    <p>A selection of recent websites and web apps built for small businesses across India.</p>
+  </div>
+
+  <section class="container section">
+    <div class="portfolio-grid">
+      <a class="port-card" href="https://github.com/BackendDeveloperHub/bdh-fastapi-new" target="_blank" rel="noopener">
+        <div class="port-thumb" style="background:linear-gradient(135deg,hsl(239,84%,57%,0.3),hsl(217,91%,60%,0.3))">bdh-fastapi-new</div>
+        <div class="port-info"><p class="port-cat">CLI Tool</p><h3>bdh-fastapi-new</h3><p>PyPI-published CLI scaffold for FastAPI projects with --ai and --admin flags.</p></div>
+      </a>
+      <a class="port-card" href="https://github.com/BackendDeveloperHub/bdh-linux" target="_blank" rel="noopener">
+        <div class="port-thumb" style="background:linear-gradient(135deg,hsl(172,66%,50%,0.3),hsl(189,94%,43%,0.3))">BDH Linux</div>
+        <div class="port-info"><p class="port-cat">Linux Distro</p><h3>BDH Linux</h3><p>Custom Arch/Manjaro developer environment pre-configured for backend devs. 16,000+ AUR downloads.</p></div>
+      </a>
+      <a class="port-card" href="https://apibuil.fastapicloud.dev/" target="_blank" rel="noopener">
+        <div class="port-thumb" style="background:linear-gradient(135deg,hsl(199,89%,48%,0.3),hsl(239,84%,67%,0.3))">AI API Builder</div>
+        <div class="port-info"><p class="port-cat">AI Tool</p><h3>AI API Builder</h3><p>Converts natural language prompts into production-ready FastAPI code using Groq + Gemini.</p></div>
+      </a>
+      <a class="port-card" href="https://github.com/BackendDeveloperHub/Tamizhi" target="_blank" rel="noopener">
+        <div class="port-thumb" style="background:linear-gradient(135deg,hsl(0,84%,60%,0.3),hsl(24,100%,50%,0.3))">Tamizhi</div>
+        <div class="port-info"><p class="port-cat">Language Tool</p><h3>Tamizhi</h3><p>Native compiled Tamil-syntax programming language built using LLVM. Supports Linux x86 & Android ARM64.</p></div>
+      </a>
+      <div class="port-card" style="cursor:default;">
+        <div class="port-thumb" style="background:linear-gradient(135deg,hsl(25,95%,53%,0.3),hsl(0,84%,60%,0.3))">Routely</div>
+        <div class="port-info"><p class="port-cat">API Platform</p><h3>Routely</h3><p>Logistics API powering 200+ daily delivery routes with real-time tracking.</p></div>
+      </div>
+      <div class="port-card" style="cursor:default;">
+        <div class="port-thumb" style="background:linear-gradient(135deg,hsl(142,76%,36%,0.3),hsl(84,81%,44%,0.3))">Greenleaf</div>
+        <div class="port-info"><p class="port-cat">Marketing Website</p><h3>Greenleaf Realty</h3><p>Lead-generating real estate website with property search and agent booking.</p></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ════════════════════════════════
+     ABOUT PAGE
+════════════════════════════════ -->
+<main id="page-about" class="page">
+
+  <div class="page-hero">
+    <h1>About <span class="text-gradient">Developer Labs</span></h1>
+    <p>A small, focused team of developers helping small businesses do more on the web.</p>
+  </div>
+
+  <section class="container section">
+    <div class="about-story">
+      <div>
+        <p class="eyebrow">Our Story</p>
+        <h2>Built by developers who care</h2>
+        <p>Developer Labs started with a simple idea: small businesses deserve the same quality of software that big companies enjoy. We're a tight team of full-stack developers, designers and product thinkers shipping work we're proud of.</p>
+        <p>We've shipped 50+ projects across India and beyond — from local studios to funded SaaS startups. Backed by the open-source community of <strong>BackendDeveloperHub</strong>.</p>
+      </div>
+      <div class="about-stats">
+        <div><div class="val text-gradient">50+</div><div class="lbl">Projects shipped</div></div>
+        <div><div class="val text-gradient">3 yrs</div><div class="lbl">In business</div></div>
+        <div><div class="val text-gradient">12</div><div class="lbl">Team members</div></div>
+        <div><div class="val text-gradient">98%</div><div class="lbl">Happy clients</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container" style="padding-bottom:5rem;">
+    <h2 style="text-align:center;font-size:1.875rem;font-weight:700;">Our values</h2>
+    <div class="values-grid">
+      <div class="val-card"><div class="val-icon">⚡</div><h3>Ship fast</h3><p>We move quickly without cutting corners. Most projects ship in 2–6 weeks.</p></div>
+      <div class="val-card"><div class="val-icon">❤️</div><h3>Care deeply</h3><p>Your project is treated like our own. We sweat the details that others miss.</p></div>
+      <div class="val-card"><div class="val-icon">🎯</div><h3>Stay focused</h3><p>We don't take on every project — only ones we're confident we can knock out of the park.</p></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ════════════════════════════════
+     CONTACT PAGE
+════════════════════════════════ -->
+<main id="page-contact" class="page">
+
+  <div class="page-hero">
+    <h1>Get in <span class="text-gradient">touch</span></h1>
+    <p>Tell us about your project — we'll reply within 24 hours with a free quote.</p>
+  </div>
+
+  <section class="container section">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-icon">📧</div>
+          <div><p class="lbl">Email</p><p class="val">contact@developerlabs.online</p></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div><p class="lbl">Phone</p><p class="val">+91 6381931912</p></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div><p class="lbl">Office</p><p class="val">Tamil Nadu, India</p></div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div id="formSuccess" class="form-success hidden">✅ Message sent! We'll get back to you within 24 hours.</div>
+        <div class="form-group">
+          <label for="cName">Name</label>
+          <input type="text" id="cName" placeholder="Your name" maxlength="100" />
+          <span class="form-error hidden" id="errName">Name is required</span>
+        </div>
+        <div class="form-group">
+          <label for="cEmail">Email</label>
+          <input type="email" id="cEmail" placeholder="you@company.com" maxlength="255" />
+          <span class="form-error hidden" id="errEmail">Valid email is required</span>
+        </div>
+        <div class="form-group">
+          <label for="cMsg">Project Details</label>
+          <textarea id="cMsg" placeholder="Tell us about your project, goals, and timeline..." maxlength="1000"></textarea>
+          <span class="form-error hidden" id="errMsg">Message must be at least 10 characters</span>
+        </div>
+        <button class="btn btn-hero btn-hero-lg" style="width:100%;justify-content:center;" id="submitBtn" onclick="submitForm()">
+          Send Message ✈️
+        </button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <a class="logo" href="#" onclick="navigate('home')">
+        <span class="logo-icon">⌨️</span>
+        <span>Developer<span class="text-gradient">Labs</span></span>
+      </a>
+      <p>We build fast, beautiful websites and web apps for small businesses ready to grow online.</p>
+      <div class="footer-social">
+        <a class="social-btn" href="#" title="Twitter">𝕏</a>
+        <a class="social-btn" href="https://github.com/BackendDeveloperHub" target="_blank" title="GitHub">⌨</a>
+        <a class="social-btn" href="#" title="LinkedIn">in</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a onclick="navigate('about')">About</a></li>
+        <li><a onclick="navigate('portfolio')">Portfolio</a></li>
+        <li><a onclick="navigate('contact')">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a onclick="navigate('services')">Business Websites</a></li>
+        <li><a onclick="navigate('services')">Web Apps</a></li>
+        <li><a onclick="navigate('services')">API Development</a></li>
+        <li><a onclick="navigate('pricing')">Pricing</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <p>© <span id="yr"></span> Developer Labs. All rights reserved.</p>
+    <p>Crafted with care in India 🇮🇳</p>
+  </div>
+</footer>
+
+<script>
+  // ── Year
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // ── Navigation
+  function navigate(page) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    // Show target
+    const target = document.getElementById('page-' + page);
+    if (target) target.classList.add('active');
+    // Update nav active state
+    document.querySelectorAll('[data-page]').forEach(a => {
+      a.classList.toggle('active', a.dataset.page === page);
+    });
+    // Close mobile menu
+    document.getElementById('mobileMenu').classList.remove('open');
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Update hash
+    history.pushState(null, '', '#' + page);
+  }
+
+  // Return false prevents link default
+  document.querySelectorAll('a[onclick^="navigate"]').forEach(a => {
+    a.addEventListener('click', e => e.preventDefault());
+  });
+
+  // ── Mobile menu toggle
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // ── Handle hash on load
+  const hash = location.hash.replace('#', '');
+  if (hash && document.getElementById('page-' + hash)) navigate(hash);
+
+  // ── Contact form
+  function submitForm() {
+    const name = document.getElementById('cName').value.trim();
+    const email = document.getElementById('cEmail').value.trim();
+    const msg = document.getElementById('cMsg').value.trim();
+    let valid = true;
+
+    // Reset errors
+    ['errName','errEmail','errMsg'].forEach(id => document.getElementById(id).classList.add('hidden'));
+    document.getElementById('formSuccess').classList.add('hidden');
+
+    if (!name) { document.getElementById('errName').classList.remove('hidden'); valid = false; }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { document.getElementById('errEmail').classList.remove('hidden'); valid = false; }
+    if (msg.length < 10) { document.getElementById('errMsg').classList.remove('hidden'); valid = false; }
+
+    if (!valid) return;
+
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      document.getElementById('formSuccess').classList.remove('hidden');
+      document.getElementById('cName').value = '';
+      document.getElementById('cEmail').value = '';
+      document.getElementById('cMsg').value = '';
+      btn.textContent = 'Send Message ✈️';
+      btn.disabled = false;
+    }, 800);
+  }
+</script>
+</body>
+</html>
